@@ -88,7 +88,7 @@ function is_many_tcp() {
 function many_tcp_open_monitor() {
   local check=$(is_many_tcp)
   if [[ $check -eq 1 ]]; then
-     load_high_action $NN_USER $NN_CPU_THRESHOLD
+     load_high_action $NN_USER $NN_CPU_THRESHOLD 
   fi
 }
 
