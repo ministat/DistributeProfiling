@@ -4,15 +4,22 @@ import os
 import random
 import re
 
+# generate the filename according to 1st line function
 def gen_filename(firstline):
-   nodot = firstline.strip()[::-1].replace('.','')
+   nodot = firstline.strip().replace('.','')
    nodollar_nodot = nodot.replace('$', '')
    noq = nodollar_nodot.replace('?', '')
    nodot_noslash = noq.replace('/', '')
-   nobracket_nodot_noslash = nodot_noslash.replace('[', '')
+   no1 = nodot_noslash.replace('\(', '')
+   no2 = no1.replace('\)', '')
+   nobracket_nodot_noslash = no2.replace('[', '')
    nobracket2_nodot_noslash = nobracket_nodot_noslash.replace(']', '')
    return nobracket2_nodot_noslash.replace(' ', '')
 
+# scan all files in @indir including subdir, select the top 1st hot function whose sampling reaches @threshold
+# save all the sampling info of all the same hot function to xxx_sum.txt
+# save the function calling stack to xxx_content.txt
+# The occurrence of hot function and its sampling percentage can be associted through 'xxx'
 def parse_profiling(indir, outdir, threshold):
    if not os.path.exists(outdir):
       os.makedirs(outdir)
