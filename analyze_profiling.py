@@ -27,8 +27,9 @@ def parse_profiling(indir, outdir, threshold):
    percentpat = re.compile(r'[(](.*?)[%]')
    for subdir, dirs, files in os.walk(indir):
        for file in files:
+           if (file.endswith(".txt") is False):
+              continue
            infile = subdir + os.sep + file
-           #print(filepath)
            dashcount = 0
            with open(infile, 'r') as inf:
               see2nddash = False
@@ -72,7 +73,7 @@ if __name__=="__main__":
    parser = argparse.ArgumentParser()
    parser.add_argument("-i", "--input", help="Specify the input directory where all profiling files locate")
    parser.add_argument("-o", "--output", help="Specify the output directory")
-   parser.add_argument("-t", "--threshold", type=int, default=10, help="Sepcify the hot function percentage to print [10~90], default is 10 percent")
+   parser.add_argument("-t", "--threshold", type=int, default=5, help="Sepcify the hot function percentage to print [10~90], default is 10 percent")
    args = parser.parse_args()
    if args.input is None or args.output is None:
       print("No input directory or output directory")
