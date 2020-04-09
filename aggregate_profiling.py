@@ -4,22 +4,15 @@ import os
 import random
 import re
 
-# generate the filename according to 1st line function
 def gen_filename(firstline):
-   nodot = firstline.strip().replace('.','')
+   nodot = firstline.strip()[::-1].replace('.','')
    nodollar_nodot = nodot.replace('$', '')
    noq = nodollar_nodot.replace('?', '')
    nodot_noslash = noq.replace('/', '')
-   no1 = nodot_noslash.replace('(', '')
-   no2 = no1.replace(')', '')
-   nobracket_nodot_noslash = no2.replace('[', '')
+   nobracket_nodot_noslash = nodot_noslash.replace('[', '')
    nobracket2_nodot_noslash = nobracket_nodot_noslash.replace(']', '')
    return nobracket2_nodot_noslash.replace(' ', '')
 
-# scan all files in @indir including subdir, select the top 1st hot function whose sampling reaches @threshold
-# save all the sampling info of all the same hot function to xxx_sum.txt
-# save the function calling stack to xxx_content.txt
-# The occurrence of hot function and its sampling percentage can be associted through 'xxx'
 def parse_profiling(indir, outdir, threshold):
    if not os.path.exists(outdir):
       os.makedirs(outdir)
@@ -27,9 +20,8 @@ def parse_profiling(indir, outdir, threshold):
    percentpat = re.compile(r'[(](.*?)[%]')
    for subdir, dirs, files in os.walk(indir):
        for file in files:
-           if (file.endswith(".txt") is False):
-              continue
            infile = subdir + os.sep + file
+           #print(filepath)
            dashcount = 0
            with open(infile, 'r') as inf:
               see2nddash = False
@@ -73,7 +65,7 @@ if __name__=="__main__":
    parser = argparse.ArgumentParser()
    parser.add_argument("-i", "--input", help="Specify the input directory where all profiling files locate")
    parser.add_argument("-o", "--output", help="Specify the output directory")
-   parser.add_argument("-t", "--threshold", type=int, default=5, help="Sepcify the hot function percentage to print [10~90], default is 10 percent")
+   parser.add_argument("-t", "--threshold", type=int, default=10, help="Sepcify the hot function percentage to print [10~90], default is 10 percent")
    args = parser.parse_args()
    if args.input is None or args.output is None:
       print("No input directory or output directory")
