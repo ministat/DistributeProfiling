@@ -5,8 +5,9 @@ if [ $# -ne 1 ];then
 fi
 
 node_list=$1
+tgt_dir=profiling
 for i in `cat $node_list`
 do
-  ssh ${i} 'rm async-profiler-1.7/cpu/*'
-  ssh ${i} 'rm async-profiler-1.7/lock/*'
+  ssh ${i} 'rm $tgt_dir/cpu/*'
+  ssh ${i} 'rm $tgt_dir/lock/*'
 done

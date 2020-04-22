@@ -5,6 +5,8 @@ SCRIPT_DIR=$(dirname $(readlink -f $0))
 CPU_OUT=$SCRIPT_DIR/cpu
 LOCK_OUT=$SCRIPT_DIR/lock
 
+JAVA_HOME=/apache/java
+JPS=$JAVA_HOME/bin/jps
 LOAD_THRESHOLD=30
 CPU_THRESHOLD=400
 FILE_THRESHOLD=200
@@ -56,14 +58,20 @@ function load_high_action() {
   local cpu_usage=$2
   local jpid=""
   local outfile_postfix=`date +%Y%m%d%H%M%S`
+  local apphost=""
+  local javaname=""
   shrink_result_files
   jpid=`top -b -n 1|head -n 20|grep java|sort -k 9 -n -r|awk -v cpu=$cpu_usage -v user="$proc_user" '{if ($2==user && $9 > cpu) print $1}'|head -n 1`
   if [ "$jpid" != "" ]; then
-     $SCRIPT_DIR/cpu_profile.sh $jpid ${CPU_OUT}/${jpid}_${outfile_postfix}.txt
+     javaname=`$JPS -m|grep -v Jps|grep "^$jpid"|awk '{print $2}'`
+     apphost=`$JPS -m|grep -v Jps|grep "^$jpid"|awk '{print $4}'|awk -F @ '{print $2}'|awk -F : '{print $1}'|awk -F . '{print $1}'`
+     $SCRIPT_DIR/cpu_profile.sh $jpid ${CPU_OUT}/${javaname}_${apphost}_${jpid}_${outfile_postfix}.txt
   fi
   jpid=`top -b -n 1|head -n 20|grep java|sort -k 9 -n -r|awk -v cpu=$cpu_usage -v user="$proc_user" '{if ($2==user && $9 > cpu) print $1}'|head -n 1`
   if [ "$jpid" != "" ]; then
-     $SCRIPT_DIR/lock_profile.sh $jpid ${LOCK_OUT}/${jpid}_${outfile_postfix}.txt
+     javaname=`$JPS -m|grep -v Jps|grep "^$jpid"|awk '{print $2}'`
+     apphost=`$JPS -m|grep -v Jps|grep "^$jpid"|awk '{print $4}'|awk -F @ '{print $2}'|awk -F : '{print $1}'|awk -F . '{print $1}'`
+     $SCRIPT_DIR/lock_profile.sh $jpid ${LOCK_OUT}/${javaname}_${apphost}_${jpid}_${outfile_postfix}.txt
   fi
 }
 

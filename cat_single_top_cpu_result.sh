@@ -5,12 +5,12 @@ if [ $# -ne 1 ]; then
 fi
 
 node=$1
-
-a=`ssh ${node} "ls async-profiler-1.7/cpu/"`
+tgt_dir=profiling
+a=`ssh ${node} "ls $tgt_dir/cpu/"`
 for j in $a
 do
-  s=`ssh ${node} "cat async-profiler-1.7/cpu/$j"|grep "^Total samples"|awk '{if ($4 == 0) print "skip"}'`
+  s=`ssh ${node} "cat $tgt_dir/cpu/$j"|grep "^Total samples"|awk '{if ($4 == 0) print "skip"}'`
   if [ "$s" != "skip" ]; then
-    ssh ${node} "cat async-profiler-1.7/cpu/$j"| awk '{if ($0 ~ /---/) s++; if (s <= 2) print $0}'
+    ssh ${node} "cat $tgt_dir/cpu/$j"| awk '{if ($0 ~ /---/) s++; if (s <= 2) print $0}'
   fi
 done

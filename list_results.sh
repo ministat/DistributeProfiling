@@ -8,6 +8,6 @@ nodeList=$1
 for i in `cat $nodeList`
 do
    echo "======${i}======"
-   ssh ${i} 'ls -lt async-profiler-1.7/cpu'
-   ssh ${i} 'ls -lt async-profiler-1.7/lock'
+   ssh ${i} 'ls -lt profiling/cpu'
+   ssh ${i} 'ls -lt profiling/lock'
 done

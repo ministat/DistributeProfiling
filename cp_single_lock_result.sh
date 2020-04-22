@@ -6,6 +6,7 @@ fi
 
 node_list=$1
 out_dir=$2
+tgt_dir=profiling
 
 if [ ! -e ${out_dir} ]; then
   mkdir ${out_dir}
@@ -13,6 +14,6 @@ fi
 
 for i in `cat $node_list`
 do
-  scp -r ${i}:~/async-profiler-1.7/lock ${out_dir}/${i}-lock
+  scp -r ${i}:~/$tgt_dir/lock ${out_dir}/${i}-lock
 done
 

@@ -16,5 +16,5 @@ rawresult=${prefix}_${ptype}
 sumresult=${rawresult}_sum
 
 sh ${SCRIPT_DIR}/cp_single_${ptype}_result.sh $node_list $rawresult
-python ${SCRIPT_DIR}/analyze_profiling.py -i $rawresult -o $sumresult
+/usr/share/anaconda3/python3 ${SCRIPT_DIR}/analyze_profiling.py -i $rawresult -o $sumresult
 sh ${SCRIPT_DIR}/analyze_listing_top_sampling.sh $sumresult > $sumresult/.top_samples.txt

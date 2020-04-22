@@ -5,12 +5,13 @@ if [ $# -ne 1 ]; then
 fi
 
 node=$1
+tgt_dir=profiling
 
-a=`ssh ${node} "ls async-profiler-1.7/lock/"`
+a=`ssh ${node} "ls $tgt_dir/lock/"`
 for j in $a
 do
-  s=`ssh ${node} "cat async-profiler-1.7/lock/$j"|grep "^Total samples"|awk '{if ($4 == 0) print "skip"}'`
+  s=`ssh ${node} "cat $tgt_dir/lock/$j"|grep "^Total samples"|awk '{if ($4 == 0) print "skip"}'`
   if [ "$s" != "skip" ]; then
-    ssh ${node} "cat async-profiler-1.7/lock/$j"| awk '{if ($0 ~ /---/) s++; if (s <= 2) print $0}'
+    ssh ${node} "cat $tgt_dir/lock/$j"| awk '{if ($0 ~ /---/) s++; if (s <= 2) print $0}'
   fi
 done

@@ -7,4 +7,4 @@ fi
 node=$1
 file=$2
 
-ssh ${node} "cat async-profiler-1.7/cpu/$file" | awk '{if ($0 ~ /---/) s++; if (s <= 2) print $0}'
+ssh ${node} "cat profiling/cpu/$file" | awk '{if ($0 ~ /---/) s++; if (s <= 2) print $0}'
